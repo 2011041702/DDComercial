@@ -35,7 +35,7 @@ public class AdaptadorDetalleCombo extends RecyclerView.Adapter<AdaptadorDetalle
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_combo_detalle, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_lista_combo_detalle, parent, false);
         return new ViewHolder(v, this);
     }
 

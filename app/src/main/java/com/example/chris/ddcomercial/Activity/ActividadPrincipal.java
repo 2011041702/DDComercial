@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.chris.ddcomercial.Fragment.FragmentoCervezas;
 import com.example.chris.ddcomercial.Fragment.FragmentoInicio;
 import com.example.chris.ddcomercial.R;
 
@@ -71,10 +72,10 @@ public class ActividadPrincipal extends AppCompatActivity {
             case R.id.item_inicio:
                 fragmentoGenerico = new FragmentoInicio();
                 break;
-           /* case R.id.item_cuenta:
-                fragmentoGenerico = new FragmentoCuenta();
+            case R.id.nav_Cervezas:
+                fragmentoGenerico = new FragmentoCervezas();
                 break;
-            case R.id.item_categorias:
+           /* case R.id.item_categorias:
                 fragmentoGenerico = new FragmentoCategorias();
                 break;
             case R.id.item_configuracion:

@@ -1,7 +1,5 @@
 package com.example.chris.ddcomercial.Adaptadores;
 
-
-import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,64 +8,59 @@ import android.view.ViewGroup;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
-import com.example.chris.ddcomercial.Activity.ActividadDetalleCombo;
-import com.example.chris.ddcomercial.Clases.Combos;
+import com.example.chris.ddcomercial.Clases.Cervezas;
 import com.example.chris.ddcomercial.Clases.CustomVolleyRequest;
 import com.example.chris.ddcomercial.R;
-
 
 import java.util.List;
 
 /**
- * Created by Chris on 29/05/2016.
+ * Created by Chris on 15/06/2016.
  */
-public class AdaptadorInicio extends RecyclerView.Adapter<AdaptadorInicio.ViewHolder> implements ItemClickListenerInicio {
-
+public class AdaptadorCervezas extends RecyclerView.Adapter<AdaptadorCervezas.ViewHolder> implements ItemClickListenerCervezas {
 
     private ImageLoader imageLoader;
     private Context context;
-    List<Combos> superCombos;
+    List<Cervezas> superCervezas;
 
-
-    public AdaptadorInicio(List<Combos> superCombos, Context context) {
-        this.superCombos = superCombos;
+    public AdaptadorCervezas(List<Cervezas> superCervezas, Context context) {
+        this.superCervezas = superCervezas;
         this.context = context;
     }
-
     @Override
     public int getItemCount() {
-        return superCombos.size();
+        return superCervezas.size();
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_lista_combos, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_lista_cervezas, parent, false);
         return new ViewHolder(v, this);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
-        Combos combo = superCombos.get(position);
+        Cervezas cerveza = superCervezas.get(position);
         imageLoader = CustomVolleyRequest.getInstance(context).getImageLoader();
-        holder.imageView.setImageUrl(combo.getImg_comb(), imageLoader);
+        holder.imageView.setImageUrl(cerveza.getImg_marc(), imageLoader);
 
     }
 
     @Override
     public void onItemClick(View view, int position) {
-        ActividadDetalleCombo.launch((Activity) context, superCombos.get(position).getId_combo());
+        //ActividadDetalleCombo.launch((Activity) context, superCombos.get(position).getId_combo());
     }
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         //Views
         public NetworkImageView imageView;
-        public ItemClickListenerInicio listener;
+        public ItemClickListenerCervezas listener;
 
-        public ViewHolder(View itemView, ItemClickListenerInicio listener) {
+        public ViewHolder(View itemView, ItemClickListenerCervezas listener) {
             super(itemView);
-            imageView = (NetworkImageView) itemView.findViewById(R.id.imageViewHero);
+            imageView = (NetworkImageView) itemView.findViewById(R.id.imageView_Cervezas);
             this.listener = listener;
             itemView.setOnClickListener(this);
         }
@@ -78,7 +71,6 @@ public class AdaptadorInicio extends RecyclerView.Adapter<AdaptadorInicio.ViewHo
         }
     }
 }
-
-interface ItemClickListenerInicio {
+interface ItemClickListenerCervezas {
     void onItemClick(View view, int position);
 }
