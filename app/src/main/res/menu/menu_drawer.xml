@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/item_inicio"
+            android:checked="true"
+            android:icon="@drawable/inicio"
+            android:title="@string/item_inicio" />        
+        <item
+            android:id="@+id/nav_Cervezas"
+            android:icon="@drawable/ic_beer_white_18dp"
+            android:title="Cervezas" />
+        <item
+            android:id="@+id/nav_Ron"
+            android:icon="@drawable/ic_glass_tulip_white_18dp"
+            android:title="Ron" />
+        <item
+            android:id="@+id/nav_Vinos"
+            android:icon="@drawable/ic_glass_tulip_white_18dp"
+            android:title="Vinos" />
+        <item
+            android:id="@+id/nav_Whisky"
+            android:icon="@drawable/ic_glass_tulip_white_18dp"
+            android:title="Whisky" />
+
+        <item
+            android:id="@+id/nav_Espumante"
+            android:icon="@drawable/ic_glass_tulip_white_18dp"
+            android:title="Espumantes" />
+
+        <item
+            android:id="@+id/nav_Otros"
+            android:icon="@drawable/ic_glass_tulip_white_18dp"
+            android:title="Otros" />
+
+        <item
+            android:id="@+id/nav_Sin_Alcohol"
+            android:icon="@drawable/ic_local_cafe_white_18dp"
+            android:title="Bebidas sin Alcohol" />
+        <item
+            android:id="@+id/nav_Complementos"
+            android:icon="@drawable/ic_delete_variant_white_18dp"
+            android:title="Complementos" />
+        <item
+            android:id="@+id/nav_Energizante"
+            android:icon="@drawable/ic_flash_white_18dp"
+            android:title="Energizantes" />
+
+        <item
+            android:id="@+id/nav_Snacks"
+            android:icon="@drawable/ic_food_fork_drink_white_18dp"
+            android:title="Snacks" />
+        <item
+            android:id="@+id/nav_Cigarros"
+            android:icon="@drawable/ic_fire_white_18dp"
+            android:title="Cigarros" />
+        <item
+            android:id="@+id/nav_Cuenta"
+            android:icon="@drawable/ic_account_circle_white_18dp"
+            android:title="Mi Cuenta" />
+    </group>
+
+</menu>
