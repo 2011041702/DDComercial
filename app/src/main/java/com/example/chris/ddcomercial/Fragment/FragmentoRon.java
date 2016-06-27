@@ -1,10 +1,7 @@
 package com.example.chris.ddcomercial.Fragment;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,9 +14,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.chris.ddcomercial.Adaptadores.AdaptadorInicio;
-import com.example.chris.ddcomercial.Clases.Combos;
+import com.example.chris.ddcomercial.Adaptadores.AdapterRon;
+import com.example.chris.ddcomercial.Clases.Cervezas;
 import com.example.chris.ddcomercial.Clases.Conexion;
+import com.example.chris.ddcomercial.Clases.Ron;
 import com.example.chris.ddcomercial.R;
 
 import org.json.JSONArray;
@@ -29,59 +27,43 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-
-
-public class FragmentoInicio extends Fragment implements RecyclerView.OnScrollChangeListener, AdaptadorInicio.EscuchaEventosClick {
-
-    private List<Combos> ListaCombos;
+/**
+ * Created by Chris on 26/06/2016.
+ */
+public class FragmentoRon extends Fragment implements RecyclerView.OnScrollChangeListener, AdapterRon.EscuchaEventosClick {
+    private List<Ron> ListaRon;
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private RecyclerView.Adapter adapter;
     private RequestQueue requestQueue;
     private int requestCount = 1;
-    private FloatingActionButton fab;
 
-    public FragmentoInicio() {
+    public FragmentoRon() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragmento_inicio, container, false);
+        View v = inflater.inflate(R.layout.fragmento_ron, container, false);
 
-        recyclerView = (RecyclerView)v.findViewById(R.id.reciclador);
-        fab = (FloatingActionButton) v.findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
+        recyclerView = (RecyclerView)v.findViewById(R.id.reciclador_ron);
 
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
-
-        //Initializing our superheroes list
-        ListaCombos = new ArrayList<>();
+        ListaRon = new ArrayList<>();
         requestQueue = Volley.newRequestQueue(getActivity());
-
-        //Calling method to get data to fetch data
         getData();
-        //initializing our adapter
-        adapter = new AdaptadorInicio(ListaCombos, getActivity(), this);
-
-
+        //adapter = new AdaptadorCervezas(ListaCervezas, getActivity());
+        adapter = new AdapterRon(ListaRon, getActivity(), this);
         recyclerView.setAdapter(adapter);
-
         return v;
     }
+
     private JsonArrayRequest getDataFromServer(int requestCount) {
 
-
-
         //JsonArrayRequest of volley
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Conexion.DATA_URL,
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Conexion.DATA_RON,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
@@ -113,23 +95,21 @@ public class FragmentoInicio extends Fragment implements RecyclerView.OnScrollCh
     private void parseData(JSONArray array) {
         for (int i = 0; i < array.length(); i++) {
             //Creating the superhero object
-            Combos superCombo = new Combos();
+            Ron superRon = new Ron();
             JSONObject json = null;
             try {
                 //Getting json
                 json = array.getJSONObject(i);
 
                 //Adding data to the superhero object
-                superCombo.setId_combo(json.getString(Conexion.TAG_ID));
-                superCombo.setNom_comb(json.getString(Conexion.TAG_NOMBRE));
-                superCombo.setDesc_comb(json.getString(Conexion.TAG_DESCRP));
-                superCombo.setPrecio_comb(json.getString(Conexion.TAG_PRE));
-                superCombo.setImg_comb(json.getString(Conexion.TAG_IMG));
+                superRon.setId_marca(json.getString(Conexion._ID_MARCA));
+                superRon.setNom_marca(json.getString(Conexion._NOMBRE_MARCA));
+                superRon.setImg_marc(json.getString(Conexion._IMG_MARCA));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
             //Adding the superhero object to the list
-            ListaCombos.add(superCombo);
+            ListaRon.add(superRon);
         }
 
         //Notifying the adapter that data has been added or changed
@@ -154,13 +134,7 @@ public class FragmentoInicio extends Fragment implements RecyclerView.OnScrollCh
     }
 
     @Override
-    public void onItemClick(AdaptadorInicio.ViewHolder holder, int posicion) {
-
-        /*FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        FragmentoDetalleInicio ad = new FragmentoDetalleInicio();
-        getParentFragment();
-        fragmentManager.beginTransaction().replace(R.id.contenedor_principal, ad.createInstance(ListaCombos.get(posicion).getId_combo()), "FragmentoDetalleInicio").addToBackStack("tag").commit();*/
+    public void onItemClick(AdapterRon.ViewHolder holder, int posicion) {
 
     }
 }

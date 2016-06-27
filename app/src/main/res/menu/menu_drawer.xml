@@ -25,28 +25,22 @@
             android:title="Whisky" />
 
         <item
-            android:id="@+id/nav_Espumante"
+            android:id="@+id/nav_Vodkas"
             android:icon="@drawable/ic_glass_tulip_white_18dp"
-            android:title="Espumantes" />
+            android:title="Vodka" />
 
         <item
-            android:id="@+id/nav_Otros"
+            android:id="@+id/nav_Pisco"
             android:icon="@drawable/ic_glass_tulip_white_18dp"
-            android:title="Otros" />
-
-        <item
-            android:id="@+id/nav_Sin_Alcohol"
-            android:icon="@drawable/ic_local_cafe_white_18dp"
-            android:title="Bebidas sin Alcohol" />
-        <item
-            android:id="@+id/nav_Complementos"
-            android:icon="@drawable/ic_delete_variant_white_18dp"
-            android:title="Complementos" />
+            android:title="Pisco" />
         <item
             android:id="@+id/nav_Energizante"
             android:icon="@drawable/ic_flash_white_18dp"
             android:title="Energizantes" />
-
+        <item
+            android:id="@+id/nav_Gaseosas"
+            android:icon="@drawable/ic_flash_white_18dp"
+            android:title="Gaseosas" />
         <item
             android:id="@+id/nav_Snacks"
             android:icon="@drawable/ic_food_fork_drink_white_18dp"

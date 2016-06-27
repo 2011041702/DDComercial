@@ -10,13 +10,14 @@
         android:layout_gravity="center"
         android:layout_width="match_parent"
         android:layout_height="150dp"
+        android:elevation="15dp"
         card_view:cardCornerRadius="4dp"
         android:scrollbars="vertical">
 
         <com.android.volley.toolbox.NetworkImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/imageView_Cervezas"
+            android:id="@+id/imageView_Vinos"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true" />
 

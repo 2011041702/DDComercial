@@ -14,19 +14,40 @@ import com.example.chris.ddcomercial.R;
 
 import java.util.List;
 
-/**
- * Created by Chris on 15/06/2016.
- */
-public class AdaptadorCervezas extends RecyclerView.Adapter<AdaptadorCervezas.ViewHolder> implements ItemClickListenerCervezas {
+
+public class AdapterCerveza extends RecyclerView.Adapter<AdapterCerveza.ViewHolder> {
 
     private ImageLoader imageLoader;
     private Context context;
     List<Cervezas> superCervezas;
+    private EscuchaEventosClick escucha;
 
-    public AdaptadorCervezas(List<Cervezas> superCervezas, Context context) {
+    public interface EscuchaEventosClick {
+        void onItemClick(ViewHolder holder, int posicion);
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        //Views
+        public NetworkImageView imageView;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            imageView = (NetworkImageView) itemView.findViewById(R.id.imageView_Cervezas);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            escucha.onItemClick(this, getAdapterPosition());
+        }
+    }
+
+    public AdapterCerveza(List<Cervezas> superCervezas, Context context, EscuchaEventosClick escucha) {
         this.superCervezas = superCervezas;
         this.context = context;
+        this.escucha = escucha;
     }
+
     @Override
     public int getItemCount() {
         return superCervezas.size();
@@ -35,42 +56,12 @@ public class AdaptadorCervezas extends RecyclerView.Adapter<AdaptadorCervezas.Vi
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_lista_cervezas, parent, false);
-        return new ViewHolder(v, this);
+        return new ViewHolder(v);
     }
-
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-
         Cervezas cerveza = superCervezas.get(position);
         imageLoader = CustomVolleyRequest.getInstance(context).getImageLoader();
         holder.imageView.setImageUrl(cerveza.getImg_marc(), imageLoader);
-
     }
-
-    @Override
-    public void onItemClick(View view, int position) {
-        //ActividadDetalleCombo.launch((Activity) context, superCombos.get(position).getId_combo());
-    }
-
-
-    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        //Views
-        public NetworkImageView imageView;
-        public ItemClickListenerCervezas listener;
-
-        public ViewHolder(View itemView, ItemClickListenerCervezas listener) {
-            super(itemView);
-            imageView = (NetworkImageView) itemView.findViewById(R.id.imageView_Cervezas);
-            this.listener = listener;
-            itemView.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View v) {
-            listener.onItemClick(v, getAdapterPosition());
-        }
-    }
-}
-interface ItemClickListenerCervezas {
-    void onItemClick(View view, int position);
 }

@@ -14,7 +14,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.chris.ddcomercial.Adaptadores.AdaptadorCervezas;
+import com.example.chris.ddcomercial.Adaptadores.AdapterCerveza;
 import com.example.chris.ddcomercial.Clases.Cervezas;
 import com.example.chris.ddcomercial.Clases.Conexion;
 import com.example.chris.ddcomercial.R;
@@ -29,7 +29,7 @@ import java.util.List;
 /**
  * Created by Chris on 15/06/2016.
  */
-public class FragmentoCervezas extends Fragment implements RecyclerView.OnScrollChangeListener {
+public class FragmentoCervezas extends Fragment implements RecyclerView.OnScrollChangeListener, AdapterCerveza.EscuchaEventosClick {
 
     private List<Cervezas> ListaCervezas;
     private RecyclerView recyclerView;
@@ -51,15 +51,11 @@ public class FragmentoCervezas extends Fragment implements RecyclerView.OnScroll
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
-
-        //Initializing our superheroes list
         ListaCervezas = new ArrayList<>();
         requestQueue = Volley.newRequestQueue(getActivity());
-
-        //Calling method to get data to fetch data
         getData();
-        //initializing our adapter
-        adapter = new AdaptadorCervezas(ListaCervezas, getActivity());
+        //adapter = new AdaptadorCervezas(ListaCervezas, getActivity());
+        adapter = new AdapterCerveza(ListaCervezas, getActivity(), this);
         recyclerView.setAdapter(adapter);
         return v;
     }
@@ -137,4 +133,8 @@ public class FragmentoCervezas extends Fragment implements RecyclerView.OnScroll
         }
     }
 
+    @Override
+    public void onItemClick(AdapterCerveza.ViewHolder holder, int posicion) {
+
+    }
 }

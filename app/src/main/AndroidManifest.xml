@@ -10,21 +10,15 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.Comercial">
-        <activity android:name=".Activity.ActividadPrincipal">
+        <activity android:name=".Activity.ActividadPrincipal"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".Activity.ActividadDetalleCombo"
-            android:parentActivityName=".Activity.ActividadPrincipal"
-            android:label="Detalles de Combo">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Activity.ActividadDetalleCombo" />
-        </activity>
     </application>
 
 </manifest>

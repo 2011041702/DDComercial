@@ -1,6 +1,6 @@
 package com.example.chris.ddcomercial.Activity;
 
-import android.content.Intent;
+
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -14,7 +14,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.chris.ddcomercial.Fragment.FragmentoCervezas;
+import com.example.chris.ddcomercial.Fragment.FragmentoCigarros;
+import com.example.chris.ddcomercial.Fragment.FragmentoEnergizante;
+import com.example.chris.ddcomercial.Fragment.FragmentoGaseosas;
 import com.example.chris.ddcomercial.Fragment.FragmentoInicio;
+import com.example.chris.ddcomercial.Fragment.FragmentoPisco;
+import com.example.chris.ddcomercial.Fragment.FragmentoRon;
+import com.example.chris.ddcomercial.Fragment.FragmentoSnacks;
+import com.example.chris.ddcomercial.Fragment.FragmentoVinos;
+import com.example.chris.ddcomercial.Fragment.FragmentoVodka;
+import com.example.chris.ddcomercial.Fragment.FragmentoWhisky;
 import com.example.chris.ddcomercial.R;
 
 
@@ -75,10 +84,34 @@ public class ActividadPrincipal extends AppCompatActivity {
             case R.id.nav_Cervezas:
                 fragmentoGenerico = new FragmentoCervezas();
                 break;
-           /* case R.id.item_categorias:
-                fragmentoGenerico = new FragmentoCategorias();
+            case R.id.nav_Ron:
+                fragmentoGenerico = new FragmentoRon();
                 break;
-            case R.id.item_configuracion:
+            case R.id.nav_Vinos:
+                fragmentoGenerico = new FragmentoVinos();
+                break;
+            case R.id.nav_Whisky:
+                fragmentoGenerico = new FragmentoWhisky();
+                break;
+            case R.id.nav_Vodkas:
+                fragmentoGenerico = new FragmentoVodka();
+                break;
+            case R.id.nav_Pisco:
+                fragmentoGenerico = new FragmentoPisco();
+                break;
+            case R.id.nav_Energizante:
+                fragmentoGenerico = new FragmentoEnergizante();
+                break;
+            case R.id.nav_Gaseosas:
+                fragmentoGenerico = new FragmentoGaseosas();
+                break;
+            case R.id.nav_Snacks:
+                fragmentoGenerico = new FragmentoSnacks();
+                break;
+            case R.id.nav_Cigarros:
+                fragmentoGenerico = new FragmentoCigarros();
+                break;
+           /* case R.id.item_configuracion:
                 startActivity(new Intent(this, ActividadConfiguracion.class));
                 break;*/
         }
