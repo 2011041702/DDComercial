@@ -15,4 +15,7 @@
     <style name="Theme.ColorTexto" parent="Base.AppTheme">
         <item name="titleTextColor">@color/color_light</item>
     </style>
+    <style name="FullScreenTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowFullscreen">true</item>
+    </style>
 </resources>

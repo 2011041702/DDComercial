@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.SearchView;
 
 import com.example.chris.ddcomercial.Fragment.FragmentoCervezas;
 import com.example.chris.ddcomercial.Fragment.FragmentoCigarros;
@@ -30,6 +31,9 @@ import com.example.chris.ddcomercial.R;
 public class ActividadPrincipal extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
+    private SearchView mSearchView;
+    private MenuItem searchMenuItem;
+    private SearchView.OnQueryTextListener listener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
