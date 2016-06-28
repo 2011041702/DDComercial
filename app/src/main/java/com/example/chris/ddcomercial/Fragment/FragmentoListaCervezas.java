@@ -1,14 +1,14 @@
 package com.example.chris.ddcomercial.Fragment;
 
 import android.os.Bundle;
+import android.support.annotation.IntegerRes;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
@@ -16,9 +16,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.chris.ddcomercial.Adaptadores.AdapterCerveza;
-import com.example.chris.ddcomercial.Clases.Cervezas;
+import com.example.chris.ddcomercial.Adaptadores.AdapterCigarros;
+import com.example.chris.ddcomercial.Adaptadores.AdapterListaCervezas;
+import com.example.chris.ddcomercial.Clases.Cigarros;
 import com.example.chris.ddcomercial.Clases.Conexion;
+import com.example.chris.ddcomercial.Clases.ProductoCervezas;
 import com.example.chris.ddcomercial.R;
 
 import org.json.JSONArray;
@@ -29,35 +31,46 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Chris on 15/06/2016.
+ * Created by Chris on 27/06/2016.
  */
-public class FragmentoCervezas extends Fragment implements RecyclerView.OnScrollChangeListener, AdapterCerveza.EscuchaEventosClick {
+public class FragmentoListaCervezas extends Fragment implements RecyclerView.OnScrollChangeListener, AdapterListaCervezas.EscuchaEventosClick {
 
-    private List<Cervezas> ListaCervezas;
+    private List<ProductoCervezas> ListaProductoCerveza;
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private RecyclerView.Adapter adapter;
     private RequestQueue requestQueue;
     private int requestCount = 1;
+    private String extra;
 
-    public FragmentoCervezas() {
+    private static final String EXTRA_ID = "IDMETA";
+
+    public FragmentoListaCervezas() {
     }
 
+    public static FragmentoListaCervezas createInstance(String idMeta) {
+        FragmentoListaCervezas detailFragment = new FragmentoListaCervezas();
+        Bundle bundle = new Bundle();
+        bundle.putString(EXTRA_ID, idMeta);
+        detailFragment.setArguments(bundle);
+        return detailFragment;
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragmento_cervezas, container, false);
+        View v = inflater.inflate(R.layout.fragmento_lista_cervezas, container, false);
 
-        recyclerView = (RecyclerView)v.findViewById(R.id.reciclador_cervezas);
+        recyclerView = (RecyclerView)v.findViewById(R.id.reciclador_lista_cerveza);
 
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
-        ListaCervezas = new ArrayList<>();
+        ListaProductoCerveza = new ArrayList<>();
         requestQueue = Volley.newRequestQueue(getActivity());
+        extra = getArguments().getString(EXTRA_ID);
         getData();
         //adapter = new AdaptadorCervezas(ListaCervezas, getActivity());
-        adapter = new AdapterCerveza(ListaCervezas, getActivity(), this);
+        adapter = new AdapterListaCervezas(ListaProductoCerveza, getActivity(), this);
         recyclerView.setAdapter(adapter);
         return v;
     }
@@ -65,7 +78,7 @@ public class FragmentoCervezas extends Fragment implements RecyclerView.OnScroll
     private JsonArrayRequest getDataFromServer(int requestCount) {
 
         //JsonArrayRequest of volley
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Conexion.DATA_CERVEZAS,
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Conexion.DATA_PRODUCTOS + extra,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
@@ -97,21 +110,22 @@ public class FragmentoCervezas extends Fragment implements RecyclerView.OnScroll
     private void parseData(JSONArray array) {
         for (int i = 0; i < array.length(); i++) {
             //Creating the superhero object
-            Cervezas superCervezas = new Cervezas();
+            ProductoCervezas superproductocervezas = new ProductoCervezas();
             JSONObject json = null;
             try {
                 //Getting json
                 json = array.getJSONObject(i);
 
                 //Adding data to the superhero object
-                superCervezas.setId_marca(json.getString(Conexion._ID_MARCA));
-                superCervezas.setNom_marca(json.getString(Conexion._NOMBRE_MARCA));
-                superCervezas.setImg_marc(json.getString(Conexion._IMG_MARCA));
+                superproductocervezas.setId_Producto(json.getString(Conexion.ID_PROD));
+                superproductocervezas.setNombre_producto(json.getString(Conexion.NOMBRE_PROD));
+                superproductocervezas.setPrecio_producto(json.getString(Conexion.PRECIO_PROD));
+                superproductocervezas.setImg_producto(json.getString(Conexion.IMAGE_PROD));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
             //Adding the superhero object to the list
-            ListaCervezas.add(superCervezas);
+            ListaProductoCerveza.add(superproductocervezas);
         }
 
         //Notifying the adapter that data has been added or changed
@@ -136,16 +150,16 @@ public class FragmentoCervezas extends Fragment implements RecyclerView.OnScroll
     }
 
     @Override
-    public void onItemClick(AdapterCerveza.ViewHolder holder, int posicion) {
+    public void onItemClick(AdapterListaCervezas.ViewHolder holder, int posicion) {
 
-        String id = ListaCervezas.get(posicion).getId_marca().toString();
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        fragmentManager.beginTransaction().replace(R.id.contenedor_principal, FragmentoListaCervezas.createInstance(id), "FragmentoListaCervezas").addToBackStack("tag").commit();
+        //int a = holder.textPrecioProducto.getText().toString();
+        String a = holder.textPrecioProducto.getText().toString();
 
+        int aa = Integer.valueOf(a) * 3 ;
 
-        //fragmentManager.beginTransaction().replace(R.id.contenedor_principal, fragment).addToBackStack("tag").commit();
-        //Toast.makeText(getActivity(), ListaCervezas.get(posicion).getId_marca(), Toast.LENGTH_SHORT).show();
+        int aaaa = 1;
+
+        Toast.makeText(getActivity(), "hola " + aa , Toast.LENGTH_SHORT).show();
 
 
     }
