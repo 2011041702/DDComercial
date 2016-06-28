@@ -142,11 +142,7 @@ public class FragmentoCervezas extends Fragment implements RecyclerView.OnScroll
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         fragmentManager.beginTransaction().replace(R.id.contenedor_principal, FragmentoListaCervezas.createInstance(id), "FragmentoListaCervezas").addToBackStack("tag").commit();
-
-
         //fragmentManager.beginTransaction().replace(R.id.contenedor_principal, fragment).addToBackStack("tag").commit();
         //Toast.makeText(getActivity(), ListaCervezas.get(posicion).getId_marca(), Toast.LENGTH_SHORT).show();
-
-
     }
 }

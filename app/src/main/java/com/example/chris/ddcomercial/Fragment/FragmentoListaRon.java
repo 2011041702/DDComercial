@@ -2,8 +2,6 @@ package com.example.chris.ddcomercial.Fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,10 +14,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.chris.ddcomercial.Adaptadores.AdapterRon;
-import com.example.chris.ddcomercial.Clases.Cervezas;
+import com.example.chris.ddcomercial.Adaptadores.AdapterListaCervezas;
+import com.example.chris.ddcomercial.Adaptadores.AdapterListaRon;
 import com.example.chris.ddcomercial.Clases.Conexion;
-import com.example.chris.ddcomercial.Clases.Ron;
+import com.example.chris.ddcomercial.Clases.ProductoCervezas;
+import com.example.chris.ddcomercial.Clases.ProductoRon;
 import com.example.chris.ddcomercial.R;
 
 import org.json.JSONArray;
@@ -30,34 +29,46 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Chris on 26/06/2016.
+ * Created by Chris on 28/06/2016.
  */
-public class FragmentoRon extends Fragment implements RecyclerView.OnScrollChangeListener, AdapterRon.EscuchaEventosClick {
-    private List<Ron> ListaRon;
+public class FragmentoListaRon extends Fragment implements RecyclerView.OnScrollChangeListener, AdapterListaRon.EscuchaEventosClick {
+
+    private List<ProductoRon> ListaProductoRon;
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private RecyclerView.Adapter adapter;
     private RequestQueue requestQueue;
     private int requestCount = 1;
+    private String extra;
 
-    public FragmentoRon() {
+    private static final String EXTRA_ID = "IDMETA";
+
+    public FragmentoListaRon() {
     }
 
+    public static FragmentoListaRon createInstance(String idMeta) {
+        FragmentoListaRon detailFragment = new FragmentoListaRon();
+        Bundle bundle = new Bundle();
+        bundle.putString(EXTRA_ID, idMeta);
+        detailFragment.setArguments(bundle);
+        return detailFragment;
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragmento_ron, container, false);
+        View v = inflater.inflate(R.layout.fragmento_lista_ron, container, false);
 
-        recyclerView = (RecyclerView)v.findViewById(R.id.reciclador_ron);
+        recyclerView = (RecyclerView)v.findViewById(R.id.reciclador_lista_ron);
 
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
-        ListaRon = new ArrayList<>();
+        ListaProductoRon = new ArrayList<>();
         requestQueue = Volley.newRequestQueue(getActivity());
+        extra = getArguments().getString(EXTRA_ID);
         getData();
         //adapter = new AdaptadorCervezas(ListaCervezas, getActivity());
-        adapter = new AdapterRon(ListaRon, getActivity(), this);
+        adapter = new AdapterListaRon(ListaProductoRon, getActivity(), this);
         recyclerView.setAdapter(adapter);
         return v;
     }
@@ -65,7 +76,7 @@ public class FragmentoRon extends Fragment implements RecyclerView.OnScrollChang
     private JsonArrayRequest getDataFromServer(int requestCount) {
 
         //JsonArrayRequest of volley
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Conexion.DATA_RON,
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Conexion.DATA_PRODUCTOS + extra,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
@@ -97,21 +108,22 @@ public class FragmentoRon extends Fragment implements RecyclerView.OnScrollChang
     private void parseData(JSONArray array) {
         for (int i = 0; i < array.length(); i++) {
             //Creating the superhero object
-            Ron superRon = new Ron();
+            ProductoRon superproductoron = new ProductoRon();
             JSONObject json = null;
             try {
                 //Getting json
                 json = array.getJSONObject(i);
 
                 //Adding data to the superhero object
-                superRon.setId_marca(json.getString(Conexion._ID_MARCA));
-                superRon.setNom_marca(json.getString(Conexion._NOMBRE_MARCA));
-                superRon.setImg_marc(json.getString(Conexion._IMG_MARCA));
+                superproductoron.setId_Producto(json.getString(Conexion.ID_PROD));
+                superproductoron.setNombre_producto(json.getString(Conexion.NOMBRE_PROD));
+                superproductoron.setPrecio_producto(json.getString(Conexion.PRECIO_PROD));
+                superproductoron.setImg_producto(json.getString(Conexion.IMAGE_PROD));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
             //Adding the superhero object to the list
-            ListaRon.add(superRon);
+            ListaProductoRon.add(superproductoron);
         }
 
         //Notifying the adapter that data has been added or changed
@@ -136,11 +148,7 @@ public class FragmentoRon extends Fragment implements RecyclerView.OnScrollChang
     }
 
     @Override
-    public void onItemClick(AdapterRon.ViewHolder holder, int posicion) {
+    public void onItemClick(AdapterListaRon.ViewHolder holder, int posicion) {
 
-        String id = ListaRon.get(posicion).getId_marca().toString();
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        fragmentManager.beginTransaction().replace(R.id.contenedor_principal, FragmentoListaRon.createInstance(id), "FragmentoListaRon").addToBackStack("tag").commit();
     }
 }
