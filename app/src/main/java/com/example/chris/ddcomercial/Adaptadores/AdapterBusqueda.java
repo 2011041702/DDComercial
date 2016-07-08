@@ -5,21 +5,26 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
+import com.example.chris.ddcomercial.Clases.Busqueda;
 import com.example.chris.ddcomercial.Clases.Cervezas;
 import com.example.chris.ddcomercial.Clases.CustomVolleyRequest;
+import com.example.chris.ddcomercial.Clases.ProductoCervezas;
 import com.example.chris.ddcomercial.R;
 
 import java.util.List;
 
-
-public class AdapterCerveza extends RecyclerView.Adapter<AdapterCerveza.ViewHolder> {
+/**
+ * Created by Christian on 01/07/2016.
+ */
+public class AdapterBusqueda extends RecyclerView.Adapter<AdapterBusqueda.ViewHolder> {
 
     private ImageLoader imageLoader;
     private Context context;
-    List<Cervezas> superCervezas;
+    List<Busqueda> superBusqueda;
     private EscuchaEventosClick escucha;
 
     public interface EscuchaEventosClick {
@@ -29,10 +34,14 @@ public class AdapterCerveza extends RecyclerView.Adapter<AdapterCerveza.ViewHold
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         //Views
         public NetworkImageView imageView;
+        public TextView textNombreProducto;
+        public TextView textPrecioProducto;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            imageView = (NetworkImageView) itemView.findViewById(R.id.imageView_Cervezas);
+            imageView = (NetworkImageView) itemView.findViewById(R.id.imageView_Busqueda);
+            textNombreProducto = (TextView) itemView.findViewById(R.id.TxtNombreProducto);
+            textPrecioProducto = (TextView) itemView.findViewById(R.id.TxtPrecioProducto);
             itemView.setOnClickListener(this);
         }
 
@@ -42,36 +51,28 @@ public class AdapterCerveza extends RecyclerView.Adapter<AdapterCerveza.ViewHold
         }
     }
 
-    public AdapterCerveza(List<Cervezas> superCervezas, Context context, EscuchaEventosClick escucha) {
-        this.superCervezas = superCervezas;
+    public AdapterBusqueda(List<Busqueda> superBusqueda, Context context, EscuchaEventosClick escucha) {
+        this.superBusqueda = superBusqueda;
         this.context = context;
         this.escucha = escucha;
     }
 
-    public void clear(){
-        superCervezas.clear();
-        notifyDataSetChanged();
-    }
-    public void addAll(List<Cervezas> lista){
-        superCervezas.addAll(lista);
-        notifyDataSetChanged();
-    }
-
-
     @Override
     public int getItemCount() {
-        return superCervezas.size();
+        return superBusqueda.size();
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_lista_cervezas, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_lista_busqueda, parent, false);
         return new ViewHolder(v);
     }
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Cervezas cerveza = superCervezas.get(position);
+        Busqueda busqueda = superBusqueda.get(position);
         imageLoader = CustomVolleyRequest.getInstance(context).getImageLoader();
-        holder.imageView.setImageUrl(cerveza.getImg_marc(), imageLoader);
+        holder.imageView.setImageUrl(busqueda.getImg_producto(), imageLoader);
+        holder.textNombreProducto.setText(busqueda.getNombre_producto());
+        holder.textPrecioProducto.setText(busqueda.getPrecio_producto());
     }
 }

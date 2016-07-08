@@ -12,8 +12,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.SearchView;
+import android.support.v7.widget.SearchView;
+import android.widget.Toast;
 
+import com.example.chris.ddcomercial.Fragment.FragmentAdministrativo;
+import com.example.chris.ddcomercial.Fragment.FragmentoBusqueda;
 import com.example.chris.ddcomercial.Fragment.FragmentoCervezas;
 import com.example.chris.ddcomercial.Fragment.FragmentoCigarros;
 import com.example.chris.ddcomercial.Fragment.FragmentoEnergizante;
@@ -26,6 +29,7 @@ import com.example.chris.ddcomercial.Fragment.FragmentoVinos;
 import com.example.chris.ddcomercial.Fragment.FragmentoVodka;
 import com.example.chris.ddcomercial.Fragment.FragmentoWhisky;
 import com.example.chris.ddcomercial.R;
+
 
 
 public class ActividadPrincipal extends AppCompatActivity {
@@ -41,6 +45,23 @@ public class ActividadPrincipal extends AppCompatActivity {
         setContentView(R.layout.actividad_principal);
 
         agregarToolbar();
+
+        listener = new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                //Toast.makeText(getApplicationContext(), query, Toast.LENGTH_LONG).show();
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.contenedor_principal, FragmentoBusqueda.createInstance(query), "FragmentoBusqueda").addToBackStack("tag").commit();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                // newText is text entered by user to SearchView
+                //Toast.makeText(getApplicationContext(), newText, Toast.LENGTH_LONG).show();
+                return false;
+            }
+        };
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -115,6 +136,9 @@ public class ActividadPrincipal extends AppCompatActivity {
             case R.id.nav_Cigarros:
                 fragmentoGenerico = new FragmentoCigarros();
                 break;
+            case R.id.nav_Administrativo:
+                fragmentoGenerico = new FragmentAdministrativo();
+                break;
            /* case R.id.item_configuracion:
                 startActivity(new Intent(this, ActividadConfiguracion.class));
                 break;*/
@@ -133,6 +157,9 @@ public class ActividadPrincipal extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_actividad_principal, menu);
+        searchMenuItem = menu.findItem(R.id.action_search);
+        mSearchView = (SearchView) searchMenuItem.getActionView();
+        mSearchView.setOnQueryTextListener(listener);
         return true;
     }
 
@@ -142,6 +169,11 @@ public class ActividadPrincipal extends AppCompatActivity {
             case android.R.id.home:
                 drawerLayout.openDrawer(GravityCompat.START);
                 return true;
+        }
+        int id = item.getItemId();
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_search) {
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }

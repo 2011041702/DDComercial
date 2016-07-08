@@ -14,9 +14,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.chris.ddcomercial.Adaptadores.AdapterListaCervezas;
+import com.example.chris.ddcomercial.Adaptadores.AdapterBusqueda;
+import com.example.chris.ddcomercial.Clases.Busqueda;
 import com.example.chris.ddcomercial.Clases.Conexion;
-import com.example.chris.ddcomercial.Clases.ProductoCervezas;
 import com.example.chris.ddcomercial.R;
 
 import org.json.JSONArray;
@@ -27,11 +27,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Chris on 27/06/2016.
+ * Created by Christian on 01/07/2016.
  */
-public class FragmentoListaCervezas extends Fragment implements RecyclerView.OnScrollChangeListener, AdapterListaCervezas.EscuchaEventosClick {
+public class FragmentoBusqueda extends Fragment implements RecyclerView.OnScrollChangeListener, AdapterBusqueda.EscuchaEventosClick {
 
-    private List<ProductoCervezas> ListaProductoCerveza;
+    private List<Busqueda> ListaBusqueda;
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private RecyclerView.Adapter adapter;
@@ -41,11 +41,11 @@ public class FragmentoListaCervezas extends Fragment implements RecyclerView.OnS
 
     private static final String EXTRA_ID = "IDMETA";
 
-    public FragmentoListaCervezas() {
+    public FragmentoBusqueda() {
     }
 
-    public static FragmentoListaCervezas createInstance(String idMeta) {
-        FragmentoListaCervezas detailFragment = new FragmentoListaCervezas();
+    public static FragmentoBusqueda createInstance(String idMeta) {
+        FragmentoBusqueda detailFragment = new FragmentoBusqueda();
         Bundle bundle = new Bundle();
         bundle.putString(EXTRA_ID, idMeta);
         detailFragment.setArguments(bundle);
@@ -54,19 +54,19 @@ public class FragmentoListaCervezas extends Fragment implements RecyclerView.OnS
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragmento_lista_cervezas, container, false);
+        View v = inflater.inflate(R.layout.fragmento_busqueda, container, false);
 
-        recyclerView = (RecyclerView)v.findViewById(R.id.reciclador_lista_cerveza);
+        recyclerView = (RecyclerView)v.findViewById(R.id.reciclador_busqueda);
 
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
-        ListaProductoCerveza = new ArrayList<>();
+        ListaBusqueda = new ArrayList<>();
         requestQueue = Volley.newRequestQueue(getActivity());
         extra = getArguments().getString(EXTRA_ID);
         getData();
         //adapter = new AdaptadorCervezas(ListaCervezas, getActivity());
-        adapter = new AdapterListaCervezas(ListaProductoCerveza, getActivity(), this);
+        adapter = new AdapterBusqueda(ListaBusqueda, getActivity(), this);
         recyclerView.setAdapter(adapter);
         return v;
     }
@@ -74,7 +74,7 @@ public class FragmentoListaCervezas extends Fragment implements RecyclerView.OnS
     private JsonArrayRequest getDataFromServer(int requestCount) {
 
         //JsonArrayRequest of volley
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Conexion.DATA_PRODUCTOS + extra,
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Conexion.DATA_BUSQUEDA + extra,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
@@ -106,22 +106,22 @@ public class FragmentoListaCervezas extends Fragment implements RecyclerView.OnS
     private void parseData(JSONArray array) {
         for (int i = 0; i < array.length(); i++) {
             //Creating the superhero object
-            ProductoCervezas superproductocervezas = new ProductoCervezas();
+            Busqueda busqueda = new Busqueda();
             JSONObject json = null;
             try {
                 //Getting json
                 json = array.getJSONObject(i);
 
                 //Adding data to the superhero object
-                superproductocervezas.setId_Producto(json.getString(Conexion.ID_PROD));
-                superproductocervezas.setNombre_producto(json.getString(Conexion.NOMBRE_PROD));
-                superproductocervezas.setPrecio_producto(json.getString(Conexion.PRECIO_PROD));
-                superproductocervezas.setImg_producto(json.getString(Conexion.IMAGE_PROD));
+                busqueda.setId_Producto(json.getString(Conexion.ID_PROD));
+                busqueda.setNombre_producto(json.getString(Conexion.NOMBRE_PROD));
+                busqueda.setPrecio_producto(json.getString(Conexion.PRECIO_PROD));
+                busqueda.setImg_producto(json.getString(Conexion.IMAGE_PROD));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
             //Adding the superhero object to the list
-            ListaProductoCerveza.add(superproductocervezas);
+            ListaBusqueda.add(busqueda);
         }
 
         //Notifying the adapter that data has been added or changed
@@ -145,18 +145,9 @@ public class FragmentoListaCervezas extends Fragment implements RecyclerView.OnS
         }
     }
 
+
     @Override
-    public void onItemClick(AdapterListaCervezas.ViewHolder holder, int posicion) {
-
-        //int a = holder.textPrecioProducto.getText().toString();
-        String a = holder.textPrecioProducto.getText().toString();
-
-        int aa = Integer.valueOf(a) * 3 ;
-
-        int aaaa = 1;
-
-        Toast.makeText(getActivity(), "hola " + aa , Toast.LENGTH_SHORT).show();
-
+    public void onItemClick(AdapterBusqueda.ViewHolder holder, int posicion) {
 
     }
 }

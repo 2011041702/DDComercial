@@ -15,8 +15,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.chris.ddcomercial.Adaptadores.AdapterListaCervezas;
+import com.example.chris.ddcomercial.Adaptadores.AdapterScanCode;
 import com.example.chris.ddcomercial.Clases.Conexion;
 import com.example.chris.ddcomercial.Clases.ProductoCervezas;
+import com.example.chris.ddcomercial.Clases.ScanCode;
 import com.example.chris.ddcomercial.R;
 
 import org.json.JSONArray;
@@ -27,11 +29,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Chris on 27/06/2016.
+ * Created by Christian on 02/07/2016.
  */
-public class FragmentoListaCervezas extends Fragment implements RecyclerView.OnScrollChangeListener, AdapterListaCervezas.EscuchaEventosClick {
+public class FragmentoScanCode extends Fragment implements RecyclerView.OnScrollChangeListener, AdapterScanCode.EscuchaEventosClick {
 
-    private List<ProductoCervezas> ListaProductoCerveza;
+    private static final String EXTRA_ID = "IDMETA";
+
+    private List<ScanCode> ListaScanCode;
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private RecyclerView.Adapter adapter;
@@ -39,34 +43,33 @@ public class FragmentoListaCervezas extends Fragment implements RecyclerView.OnS
     private int requestCount = 1;
     private String extra;
 
-    private static final String EXTRA_ID = "IDMETA";
-
-    public FragmentoListaCervezas() {
+    public FragmentoScanCode() {
     }
 
-    public static FragmentoListaCervezas createInstance(String idMeta) {
-        FragmentoListaCervezas detailFragment = new FragmentoListaCervezas();
+    public static FragmentoScanCode createInstance(String idMeta) {
+        FragmentoScanCode detailFragment = new FragmentoScanCode();
         Bundle bundle = new Bundle();
         bundle.putString(EXTRA_ID, idMeta);
         detailFragment.setArguments(bundle);
         return detailFragment;
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragmento_lista_cervezas, container, false);
+        View v = inflater.inflate(R.layout.fragmento_scancode, container, false);
 
-        recyclerView = (RecyclerView)v.findViewById(R.id.reciclador_lista_cerveza);
+        recyclerView = (RecyclerView)v.findViewById(R.id.reciclador_scancode);
 
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
-        ListaProductoCerveza = new ArrayList<>();
+        ListaScanCode = new ArrayList<>();
         requestQueue = Volley.newRequestQueue(getActivity());
         extra = getArguments().getString(EXTRA_ID);
         getData();
         //adapter = new AdaptadorCervezas(ListaCervezas, getActivity());
-        adapter = new AdapterListaCervezas(ListaProductoCerveza, getActivity(), this);
+        adapter = new AdapterScanCode(ListaScanCode, getActivity(), this);
         recyclerView.setAdapter(adapter);
         return v;
     }
@@ -74,7 +77,7 @@ public class FragmentoListaCervezas extends Fragment implements RecyclerView.OnS
     private JsonArrayRequest getDataFromServer(int requestCount) {
 
         //JsonArrayRequest of volley
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Conexion.DATA_PRODUCTOS + extra,
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Conexion.DATA_SCAN_CODE + extra,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
@@ -106,22 +109,22 @@ public class FragmentoListaCervezas extends Fragment implements RecyclerView.OnS
     private void parseData(JSONArray array) {
         for (int i = 0; i < array.length(); i++) {
             //Creating the superhero object
-            ProductoCervezas superproductocervezas = new ProductoCervezas();
+            ScanCode superscancode = new ScanCode();
             JSONObject json = null;
             try {
                 //Getting json
                 json = array.getJSONObject(i);
 
                 //Adding data to the superhero object
-                superproductocervezas.setId_Producto(json.getString(Conexion.ID_PROD));
-                superproductocervezas.setNombre_producto(json.getString(Conexion.NOMBRE_PROD));
-                superproductocervezas.setPrecio_producto(json.getString(Conexion.PRECIO_PROD));
-                superproductocervezas.setImg_producto(json.getString(Conexion.IMAGE_PROD));
+                superscancode.setId_Producto(json.getString(Conexion.ID_PROD));
+                superscancode.setNombre_producto(json.getString(Conexion.NOMBRE_PROD));
+                superscancode.setPrecio_producto(json.getString(Conexion.PRECIO_PROD));
+                superscancode.setImg_producto(json.getString(Conexion.IMAGE_PROD));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
             //Adding the superhero object to the list
-            ListaProductoCerveza.add(superproductocervezas);
+            ListaScanCode.add(superscancode);
         }
 
         //Notifying the adapter that data has been added or changed
@@ -146,17 +149,7 @@ public class FragmentoListaCervezas extends Fragment implements RecyclerView.OnS
     }
 
     @Override
-    public void onItemClick(AdapterListaCervezas.ViewHolder holder, int posicion) {
-
-        //int a = holder.textPrecioProducto.getText().toString();
-        String a = holder.textPrecioProducto.getText().toString();
-
-        int aa = Integer.valueOf(a) * 3 ;
-
-        int aaaa = 1;
-
-        Toast.makeText(getActivity(), "hola " + aa , Toast.LENGTH_SHORT).show();
-
+    public void onItemClick(AdapterScanCode.ViewHolder holder, int posicion) {
 
     }
 }

@@ -1,9 +1,12 @@
 package com.example.chris.ddcomercial.Fragment;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -31,14 +34,16 @@ import java.util.List;
 /**
  * Created by Chris on 15/06/2016.
  */
-public class FragmentoCervezas extends Fragment implements RecyclerView.OnScrollChangeListener, AdapterCerveza.EscuchaEventosClick {
+public class FragmentoCervezas extends Fragment implements AdapterCerveza.EscuchaEventosClick {
 
     private List<Cervezas> ListaCervezas;
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
-    private RecyclerView.Adapter adapter;
+    //private RecyclerView.Adapter adapter;
     private RequestQueue requestQueue;
     private int requestCount = 1;
+    private SwipeRefreshLayout refreshLayout;
+    private AdapterCerveza adapter;
 
     public FragmentoCervezas() {
     }
@@ -50,16 +55,65 @@ public class FragmentoCervezas extends Fragment implements RecyclerView.OnScroll
 
         recyclerView = (RecyclerView)v.findViewById(R.id.reciclador_cervezas);
 
+
         recyclerView.setHasFixedSize(true);
-        layoutManager = new LinearLayoutManager(getActivity());
+
+        layoutManager = new GridLayoutManager(getActivity(),2);
         recyclerView.setLayoutManager(layoutManager);
+
+
         ListaCervezas = new ArrayList<>();
         requestQueue = Volley.newRequestQueue(getActivity());
         getData();
-        //adapter = new AdaptadorCervezas(ListaCervezas, getActivity());
+
+
         adapter = new AdapterCerveza(ListaCervezas, getActivity(), this);
         recyclerView.setAdapter(adapter);
+
+        refreshLayout = (SwipeRefreshLayout)v.findViewById(R.id.swipeRefresh);
+        refreshLayout.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        new HackingBackgroundTask().execute();
+                    }
+                }
+        );
         return v;
+    }
+
+
+    private class HackingBackgroundTask extends AsyncTask<Void, Void, List<Cervezas>> {
+
+        static final int DURACION = 1 * 1000; // 3 segundos de carga
+
+        @Override
+        protected List<Cervezas> doInBackground(Void... params) {
+            // Simulación de la carga de items
+            try {
+                Thread.sleep(DURACION);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            // Retornar en nuevos elementos para el adaptador
+            return new ArrayList<Cervezas>(ListaCervezas);
+        }
+
+        @Override
+        protected void onPostExecute(List<Cervezas> result) {
+            super.onPostExecute(result);
+
+            // Limpiar elementos antiguos
+            adapter.clear();
+
+            // Añadir elementos nuevos
+            adapter.addAll(result);
+
+            // Parar la animación del indicador
+            refreshLayout.setRefreshing(false);
+        }
+
     }
 
     private JsonArrayRequest getDataFromServer(int requestCount) {
@@ -118,22 +172,6 @@ public class FragmentoCervezas extends Fragment implements RecyclerView.OnScroll
         adapter.notifyDataSetChanged();
     }
 
-    //This method would check that the recyclerview scroll has reached the bottom or not
-    private boolean isLastItemDisplaying(RecyclerView recyclerView) {
-        if (recyclerView.getAdapter().getItemCount() != 0) {
-            int lastVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
-            if (lastVisibleItemPosition != RecyclerView.NO_POSITION && lastVisibleItemPosition == recyclerView.getAdapter().getItemCount() - 1)
-                return true;
-        }
-        return false;
-    }
-
-    @Override
-    public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-        if (isLastItemDisplaying(recyclerView)) {
-            getData();
-        }
-    }
 
     @Override
     public void onItemClick(AdapterCerveza.ViewHolder holder, int posicion) {

@@ -1,10 +1,12 @@
 package com.example.chris.ddcomercial.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -21,6 +23,8 @@ import com.example.chris.ddcomercial.Adaptadores.AdaptadorInicio;
 import com.example.chris.ddcomercial.Clases.Combos;
 import com.example.chris.ddcomercial.Clases.Conexion;
 import com.example.chris.ddcomercial.R;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -54,12 +58,12 @@ public class FragmentoInicio extends Fragment implements RecyclerView.OnScrollCh
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                new IntentIntegrator(getActivity()).initiateScan();
             }
         });
 
         recyclerView.setHasFixedSize(true);
-        layoutManager = new LinearLayoutManager(getActivity());
+        layoutManager = new GridLayoutManager(getActivity(),2);
         recyclerView.setLayoutManager(layoutManager);
 
         //Initializing our superheroes list
@@ -76,6 +80,40 @@ public class FragmentoInicio extends Fragment implements RecyclerView.OnScrollCh
 
         return v;
     }
+
+    @Override
+    public void onActivityResult(int requestCode,int resultCode, Intent intent){
+        final IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode,intent);
+        manejarResultado(scanResult);
+    }
+    private void manejarResultado(IntentResult scanResult){
+        if (scanResult != null) {
+            actualizar(scanResult.getContents(), scanResult.getFormatName());
+        }else{
+            Toast.makeText(getActivity(), "No se ha podido escaner ningun codigo", Toast.LENGTH_SHORT);
+        }
+    }
+    private void actualizar(String scan_result,String scan_result_format){
+
+        if (scan_result_format == "" || scan_result_format == null){
+            Toast.makeText(getActivity(), "Se cancelo la operación", Toast.LENGTH_SHORT).show();
+        }else{
+           /* Bundle bundle = new Bundle();
+            bundle.putString("CodigoBarra",scan_result);
+            Intent intent1 = new Intent();
+            intent1.setClass(MenuPrincipal.this,Busqueda.class);
+            intent1.putExtras(bundle);
+            startActivity(intent1);*/
+
+            FragmentManager fragmentManager = getFragmentManager();
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            fragmentManager.beginTransaction().replace(R.id.contenedor_principal, FragmentoScanCode.createInstance(scan_result), "FragmentoScanCode").addToBackStack("tag").commit();
+
+
+        }
+
+    }
+
     private JsonArrayRequest getDataFromServer(int requestCount) {
 
 

@@ -5,10 +5,10 @@
     android:background="#e1f5fe">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/reciclador_vodka"
+        android:id="@+id/reciclador_busqueda"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="vertical"
-        android:background="#FFFFFF" />
+        android:background="#e1f5fe" />
 
 </LinearLayout>

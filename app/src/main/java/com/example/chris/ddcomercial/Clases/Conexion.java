@@ -4,7 +4,6 @@ package com.example.chris.ddcomercial.Clases;
 public class Conexion {
 
     public static final String DATA_URL = "http://chrisrogerupt.hol.es/Comercial/WebServices/ListaCombos.php";
-    //public static final String DATA_GET_COMB = "http://chrisrogerupt.hol.es/Comercial/WebServices/DetalleCombo.php?id_comb=";
     public static final String DATA_CERVEZAS = "http://chrisrogerupt.hol.es/Comercial/WebServices/ListaCervezas.php?id_marca=1";
     public static final String DATA_RON = "http://chrisrogerupt.hol.es/Comercial/WebServices/ListaCervezas.php?id_marca=2";
     public static final String DATA_VINOS = "http://chrisrogerupt.hol.es/Comercial/WebServices/ListaCervezas.php?id_marca=8";
@@ -17,6 +16,10 @@ public class Conexion {
     public static final String DATA_CIGARROS = "http://chrisrogerupt.hol.es/Comercial/WebServices/ListaCervezas.php?id_marca=10";
 
     public static final String DATA_PRODUCTOS = "http://chrisrogerupt.hol.es/Comercial/WebServices/ListarProductos.php?id_marca=";
+    public static final String DATA_BUSQUEDA = "http://chrisrogerupt.hol.es/Comercial/WebServices/BusquedaProductos.php?NombProducto=";
+    public static final String DATA_SCAN_CODE = "http://chrisrogerupt.hol.es/Comercial/WebServices/ListaProductosScanCode.php?id_scan_code=";
+
+
 
 
 
